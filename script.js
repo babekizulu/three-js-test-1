@@ -35,27 +35,14 @@ const geometry = new BoxGeometry(boxWidth, boxHeight, boxDepth);
 //Create a material and set its colors 
 const material = new MeshPhongMaterial({color: '#44aa88'});
 
-//Create a Mesh
-const cube = new Mesh(geometry, material);
+// //Create a Mesh
+// const cube = new Mesh(geometry, material);
 
-//Add the Mesh to the Scene 
-scene.add(cube);
+// //Add the Mesh to the Scene 
+// scene.add(cube);
 
 //Render the Scene 
 renderer.render(scene, camera);
-
-//Animate the Cube to spin by rendering it inside of render loop 
-const render = (time) => {
-    time *= 0.001; //Convert time to seconds 
-
-    cube.rotation.x = time;
-    cube.rotation.y = time;
-
-    renderer.render(scene, camera);
-
-    requestAnimationFrame(render);
-};
-requestAnimationFrame(render);
 
 //Create a directional light
 const color = '#fff',
@@ -63,4 +50,36 @@ const color = '#fff',
 const light = new DirectionalLight(color, intensity);
 light.position.set(-1, 2, 4);
 scene.add(light);
+
+const makeInstance = (geometry, color, x) => {
+    const material = new MeshPhongMaterial({color});
+    const cube = new Mesh(geometry, material);
+    scene.add(cube);
+    cube.position.x = x;
+    return cube;
+}
+
+const cubes = [
+    makeInstance(geometry, '#44aa88', 0),
+    makeInstance(geometry, '#8844aa', -2),
+    makeInstance(geometry, '#aa8844', 2),
+];
+
+//Animate all 3 Cubes to spin by rendering it inside of render loop
+//Give slightly different rotations to each Cube
+const render = (time) => {
+    time *= 0.001; //Convert time to seconds 
+
+    cubes.forEach((cube, ndx) => {
+        const speed = 1 + ndx * 0.1;
+        const rot = time * speed;
+        cube.rotation.x = rot;
+        cube.rotation.y = rot;
+    });
+
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+};
+requestAnimationFrame(render);
 
