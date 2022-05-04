@@ -35,3 +35,17 @@ scene.add(cube);
 
 //Render the Scene 
 renderer.render(scene, camera);
+
+//Animate the Cube to spin by rendering it inside of render loop 
+const render = (time) => {
+    time *= 0.001; //Convert time to seconds 
+
+    cube.rotation.x = time;
+    cube.rotation.y = time;
+
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+};
+requestAnimationFrame(render);
+
