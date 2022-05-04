@@ -65,10 +65,33 @@ const cubes = [
     makeInstance(geometry, '#aa8844', 2),
 ];
 
+
+//Check if the Renderer's Canvas is not already the size that the Canvas is being displayed
+//If not, set size to canvas's display size
+const resizeRendererToDisplaySize = (renderer) => {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    
+    const needsResize = canvas.width !== width || canvas.height !== height;
+
+    if (needsResize) {
+        renderer.setSize(width, height, false);
+    }
+
+    return needsResize;
+}
+
 //Animate all 3 Cubes to spin by rendering it inside of render loop
 //Give slightly different rotations to each Cube
 const render = (time) => {
     time *= 0.001; //Convert time to seconds 
+    
+    if (resizeRendererToDisplaySize(renderer)) {
+        const canvas = renderer.domElement;
+        camera.aspect = canvas.clientWidth/canvas.clientHeight;
+        camera.updateProjectionMatrix();
+    }
 
     cubes.forEach((cube, ndx) => {
         const speed = 1 + ndx * 0.1;
