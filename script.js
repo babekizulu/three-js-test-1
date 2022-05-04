@@ -1,6 +1,14 @@
 import * as THREE from './node_modules/three/build/three.module.js';
 const canvas = document.querySelector('#canvas');
-const {WebGLRenderer, PerspectiveCamera, Scene, BoxGeometry, MeshBasicMaterial, Mesh} = THREE;
+const {
+    WebGLRenderer, 
+    PerspectiveCamera, 
+    Scene, 
+    BoxGeometry, 
+    MeshPhongMaterial, 
+    Mesh,
+    DirectionalLight
+} = THREE;
 
 //Create a new WebGL Renderer instance
 //Args: Canvas Element that we want to render 3D onto
@@ -25,7 +33,7 @@ const boxWidth = 1,
 const geometry = new BoxGeometry(boxWidth, boxHeight, boxDepth);
 
 //Create a material and set its colors 
-const material = new MeshBasicMaterial({color: '#44aa88'});
+const material = new MeshPhongMaterial({color: '#44aa88'});
 
 //Create a Mesh
 const cube = new Mesh(geometry, material);
@@ -48,4 +56,11 @@ const render = (time) => {
     requestAnimationFrame(render);
 };
 requestAnimationFrame(render);
+
+//Create a directional light
+const color = '#fff',
+    intensity = 1;
+const light = new DirectionalLight(color, intensity);
+light.position.set(-1, 2, 4);
+scene.add(light);
 
